@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheckLeft;
     public Transform groundCheckRight;
     public LayerMask tilemapCollisionLayer;
+    public Animator animator;
     
     public Rigidbody2D rb; 
     public SpriteRenderer spriteRenderer;
@@ -20,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -40,6 +41,9 @@ public class PlayerMovement : MonoBehaviour
         float horizontalMovement = horizontalInput * moveSpeed * Time.deltaTime;
 
         MovePlayer(horizontalMovement);
+
+        float characterVelocity = Mathf.Abs(rb.linearVelocityX);// Permet d'avoir une vitesse positive en allent vers la gauche
+        animator.SetFloat("Speed", characterVelocity);
 
         Flip(rb.linearVelocity.x);
     }
@@ -62,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
-        else if (_velocity < 0.1f)
+        else if (_velocity < -0.1f)
         {
             spriteRenderer.flipX = true;
         }

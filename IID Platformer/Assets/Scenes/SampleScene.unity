@@ -8718,6 +8718,7 @@ MonoBehaviour:
   tilemapCollisionLayer:
     serializedVersion: 2
     m_Bits: 8
+  animator: {fileID: 1415783683}
   rb: {fileID: 1415783679}
   spriteRenderer: {fileID: 1415783681}
 --- !u!212 &1415783681
