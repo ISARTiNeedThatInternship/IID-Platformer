@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         // != null : **Collider détecté ? Oui -> isGrounded = true ; Non -> isGrounded reste à false**
         horizontalInput = Input.GetAxis("Horizontal");
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButton("Jump") && isGrounded)
         {
             isJumping = true;
         }
