@@ -7,15 +7,16 @@ public class PlayerMovement : MonoBehaviour
     public bool isJumping;
     public bool isGrounded;
 
-    public Transform groundCheckLeft;
-    public Transform groundCheckRight;
-    public LayerMask tilemapCollisionLayer;
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask collisionLayers;
     public Animator animator;
     
     public Rigidbody2D rb; 
     public SpriteRenderer spriteRenderer;
     private Vector3 velocity = Vector3.zero;
     private float horizontalInput;
+    private float horizontalMovement;
 
     void Start()
     {
@@ -26,14 +27,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position, tilemapCollisionLayer) != null;
-        // != null : **Collider détecté ? Oui -> isGrounded = true ; Non -> isGrounded reste à false**
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, collisionLayers);
+
         horizontalInput = Input.GetAxis("Horizontal");
 
-        if (Input.GetButton("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isJumping = true;
         }
+
+        Flip(rb.linearVelocityX);
     }
 
     void FixedUpdate()
@@ -42,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
         MovePlayer(horizontalMovement);
 
-        float characterVelocity = Mathf.Abs(rb.linearVelocityX);// Permet d'avoir une vitesse positive en allent vers la gauche
+        float characterVelocity = Mathf.Abs(rb.linearVelocityX);// Permet d'avoir une vitesse positive en allant vers la gauche
         animator.SetFloat("Speed", characterVelocity);
 
         Flip(rb.linearVelocity.x);
@@ -70,5 +73,11 @@ public class PlayerMovement : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
